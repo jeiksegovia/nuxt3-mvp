@@ -8,23 +8,15 @@
   >
     <input
       type="checkbox"
-      :value="modelValue"
-      @input="() => $emit('update:modelValue', !modelValue)"
       class="hidden"
+      v-model="modelValue"
     />
     {{ modelValue ? 'leido' : 'Marcar como leido' }}
   </label>
 </template>
 
 <script setup>
-defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-defineEmits(['update:modelValue']);
+const modelValue = defineModel('modelValue',{ default: false });
 
 </script>
 
