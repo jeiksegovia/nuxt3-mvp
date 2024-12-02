@@ -16,11 +16,13 @@
     </div>
 
     <div class="prose p-12 bg-white rounded-md w-[65ch]">
-      
+      <pre>
+        {{ categories }}
+      </pre>
     </div>
   </div>
 </template>
 
 <script setup>
-
+const categories = useExampleData();
 </script>
