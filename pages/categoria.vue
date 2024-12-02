@@ -22,9 +22,5 @@
 </template>
 
 <script setup>
-const categories = useExampleData();
 
-const resetError = (error) => {
-  error.value = null;
-};
 </script>
