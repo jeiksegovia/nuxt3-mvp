@@ -8,6 +8,7 @@ export type Item = {
   contact: string; // Contact email of the user offering the service
   location: string; // Physical or virtual location of the service
   datePosted: string; // Date the service was posted (ISO format)
+  path?: string; // Path to the item's details page
 };
 
 // Type definition for a category containing multiple items
@@ -24,7 +25,7 @@ export const useExampleData = (): Category[] => {
       const newItems: Item[] = category.items.map(
         (entry) => ({
           ...entry,
-          path: `/detalles/${entry.id}/${entry.title}`,
+          path: `/detalles/${entry.id}/${entry.title.toLowerCase().replace(/ /g, '-')}`,
         })
       );
       const slug = category.name.toLowerCase().replace(/ /g, '-');
