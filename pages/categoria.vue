@@ -16,6 +16,7 @@
                   <SidebarMenuButton
                     :tooltip="'Categorias'"
                   >
+                  <Filter />
                   <span>Categorias</span>
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
@@ -31,15 +32,24 @@
           <SidebarGroup>
             <SidebarMenu>
               <Collapsible
+                v-for="category in categories"
+                :key="category.name"
                 as-child
                 class="group/collapsible"
               >
                 <SidebarMenuItem
+                @click="navigateTo(`/categoria/${category.slug}/entries`)"
                 >
                     <SidebarMenuButton
-                      :tooltip="'categoria'"
+                      :tooltip="category.name"
                     >
-                      <span>test</span>
+                      <BookOpen />
+                      <span>{{ category.name }}</span>
+                      <ChevronRight
+                      
+                        class="ml-auto transition-transform duration-200"
+                        :class="{ 'rotate-90': category.slug !== $route.params.categoria }"
+                      />
                     </SidebarMenuButton>
                 </SidebarMenuItem>
               </Collapsible>
@@ -55,7 +65,15 @@
                     size="lg"
                     class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
-
+                    <Avatar class="h-8 w-8 rounded-lg">
+                      <AvatarImage
+                        :src="data.user.avatar"
+                        :alt="data.user.name"
+                      />
+                      <AvatarFallback class="rounded-lg">
+                        JK
+                      </AvatarFallback>
+                    </Avatar>
                     <div
                       class="grid flex-1 text-left text-sm leading-tight"
                     >
@@ -67,7 +85,9 @@
                         data.user.email
                       }}</span>
                     </div>
-              
+                    <ChevronsUpDown
+                      class="ml-auto size-4"
+                    />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -82,7 +102,26 @@
                     <div
                       class="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
                     >
-                      JK
+                      <Avatar class="h-8 w-8 rounded-lg">
+                        <AvatarImage
+                          :src="data.user.avatar"
+                          :alt="data.user.name"
+                        />
+                        <AvatarFallback class="rounded-lg">
+                          JK
+                        </AvatarFallback>
+                      </Avatar>
+                      <div
+                        class="grid flex-1 text-left text-sm leading-tight"
+                      >
+                        <span
+                          class="truncate font-semibold"
+                          >{{ data.user.name }}</span
+                        >
+                        <span class="truncate text-xs">{{
+                          data.user.email
+                        }}</span>
+                      </div>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -122,7 +161,7 @@
               <BreadcrumbList>
                 <BreadcrumbItem class="hidden md:block">
                   <BreadcrumbLink href="#">
-                    Building Your Application
+                    Ultimas entradas
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator
@@ -130,7 +169,7 @@
                 />
                 <BreadcrumbItem>
                   <BreadcrumbPage
-                    >Data Fetching</BreadcrumbPage
+                    > {{ selectedCategory  }} </BreadcrumbPage
                   >
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -141,11 +180,6 @@
       </SidebarInset>
     </SidebarProvider>
 
-    <!-- </div> -->
-
-    <!-- <div class="prose p-12 bg-white rounded-md w-[65ch]">
-      <NuxtPage />
-    </div> -->
   </div>
 </template>
 
@@ -180,6 +214,12 @@ import {
 } from 'lucide-vue-next';
 
 const categories = useExampleData();
+
+const selectedCategory = computed(() => {
+  return categories.find(
+    (category) => category.slug === useRoute().params.categoria
+  )?.name || '';
+});
 
 const data = {
   user: {
