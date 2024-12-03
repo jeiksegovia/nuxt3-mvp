@@ -1,41 +1,57 @@
 <template>
   <div>
-    <p class="mt-0 uppercase font-bold text-slate-400 mb-1">
-      {{ category.name }}
-    </p>
-    <div
-      v-for="entry,index in items"
-      :key="entry.id"
-      class="flex flex-col space-x-4 mt-2 mb-8"
-    >
-      <h2 class="my-0 font-light">{{ entry.title }}</h2>
+    <ScrollArea class="h-[calc(100vh-h-16)] flex">
+      <div class="flex-1 flex flex-col gap-2 p-4 pt-0">
+        <button
+              v-for="entry,index in items"
+            :key="entry.id"
+            :class="cn(
+              'flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent'
+            )"
+            @click="toggleChecked(index)"
+          >
+            <div class="flex w-full flex-col gap-1">
+              <div class="flex items-center">
+                <div class="flex items-center gap-2">
+                  <div class="font-semibold">
+                    {{ entry.title }}
+                  </div>
+                  <span v-if="!isChecked(index)" class="flex h-2 w-2 rounded-full bg-blue-600" />
+                </div>
+                <div
+                  :class="cn(
+                    'ml-auto text-xs',
+                    !isChecked(index)
+                      ? 'text-foreground'
+                      : 'text-muted-foreground',
+                  )"
+                >
+                  {{ formatDistanceToNow(new Date(entry.datePosted), { addSuffix: true }) }}
+                </div>
+              </div>
 
-      <p>{{ entry.description }}</p>
-      <div class="flex space-x-4 mt-2 mb-8 justify-between">
-        <NuxtLink
-          class="font-normal text-md text-gray-500"
-          :to="entry.path"
-        >
-          Leer mas
-        </NuxtLink>
-
-        <itemCheckedButton
-          :model-value="isChecked(index)"
-          @update:model-value="toggleChecked(index)"
-        />
-
-        <div
-          v-if="entry.datePosted"
-          class="font-normal text-md text-gray-500 flex-grow-1"
-        >
-          {{ entry.datePosted }}
-        </div>
+              <div class="text-xs font-medium">
+                {{ entry.contact }}
+              </div>
+            </div>
+            <div class="text-xs text-muted-foreground">
+              {{ entry.description }}
+            </div>
+            <div class="flex items-center gap-2">
+              <label v-for="label of [entry.location,entry.price]" :key="label"  class="rounded bg-gray-200 p-1  ">
+                {{ label }}
+              </label>
+            </div>
+          </button>
       </div>
-    </div>
+    </ScrollArea>
   </div>
 </template>
 
 <script setup>
+import { cn } from '@/lib/utils'
+import { formatDistanceToNow } from 'date-fns'
+
 const allCategories = useExampleData();
 const route = useRoute();
 
@@ -86,4 +102,14 @@ const toggleChecked = (itemIndex) => {
   progress.value[categoryIndex][itemIndex] =
     !isChecked(itemIndex);
 };
+
+function getBadgeVariantFromLabel(label) {
+  if (['work'].includes(label.toLowerCase()))
+    return 'default'
+
+  if (['personal'].includes(label.toLowerCase()))
+    return 'outline'
+
+  return 'secondary'
+}
 </script>
