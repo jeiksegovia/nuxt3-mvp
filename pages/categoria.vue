@@ -176,10 +176,11 @@
             </Breadcrumb>
           </div>
         </header>
+          <NuxtLoadingIndicator />
           <NuxtPage />
       </SidebarInset>
     </SidebarProvider>
-    
+
   </div>
 </template>
 
@@ -213,7 +214,22 @@ import {
   Trash2,
 } from 'lucide-vue-next';
 
-const categories = useExampleData();
+
+const { data: catData, status, error, refresh, clear } = await useFetch('/api/v1/categories');
+
+if (error.value) {
+    throw createError({
+        statusCode: error.value.statusCode,
+        statusMessage: error.value.data.statusMessage,
+        fatal: true,
+    });
+}
+
+const categories = catData.value.data.map((category) => ({
+    id: category.id,
+    name: category.title,
+    slug: category.title.toLowerCase().replace(/\s/g, '-'),
+  }));
 
 const selectedCategory = computed(() => {
   return categories.find(

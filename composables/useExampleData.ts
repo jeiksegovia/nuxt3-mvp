@@ -13,6 +13,7 @@ export type Item = {
 
 // Type definition for a category containing multiple items
 export type Category = {
+  id?: string; // Unique identifier for the category
   slug: string; // URL slug for the category
   name: string; // Name of the category (e.g., "Educación y Tutorías")
   items: Item[]; // List of items under this category

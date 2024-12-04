@@ -56,7 +56,23 @@
 import { cn } from '@/lib/utils'
 import { formatDistanceToNow } from 'date-fns'
 
-const allCategories = useExampleData();
+const { data: catData, status, error, refresh, clear } = await useFetch('/api/v1/categories');
+
+if (error.value) {
+    throw createError({
+        statusCode: error.value.statusCode,
+        statusMessage: error.value.data.statusMessage,
+        fatal: true,
+    });
+}
+
+const allCategories = catData.value.data.map((category) => ({
+    id: category.id,
+    name: category.title,
+    slug: category.title.toLowerCase().replace(/\s/g, '-'),
+  }));
+
+// const allCategories = useExampleData();
 const route = useRoute();
 
 const category = computed(() => {
@@ -66,9 +82,25 @@ const category = computed(() => {
   );
 });
 
-const items = computed(() => {
-  return category.value.items;
-});
+// url encode function
+const encode = (str) => {
+  return encodeURIComponent(str);
+};
+
+const { data: selectedCat, error:errorSelectedCat} = await useFetch(`/api/v1/entries/${encode(category.value.id)}`);
+
+if (errorSelectedCat.value) {
+    throw createError({
+        statusCode: error.value.statusCode,
+        statusMessage: error.value.data.statusMessage,
+        fatal: true,
+    });
+}
+
+const items = selectedCat.value.data.map((entry) => ({
+  ...entry,
+  datePosted: entry.createdOn,
+}));
 
 const title = computed(() => {
   return `${category.value.name} - ${category.value.count} ofertas`;
