@@ -16,18 +16,22 @@
                   <div class="font-semibold">
                     {{ entry.title }}
                   </div>
-                  <span v-if="!isChecked(index)" class="flex h-2 w-2 rounded-full bg-blue-600" />
+                  <ClientOnly>
+                    <span v-if="!isChecked(index)" class="flex h-2 w-2 rounded-full bg-blue-600" />
+                  </ClientOnly>
                 </div>
-                <div
-                  :class="cn(
-                    'ml-auto text-xs',
-                    !isChecked(index)
-                      ? 'text-foreground'
-                      : 'text-muted-foreground',
-                  )"
-                >
-                  {{ formatDistanceToNow(new Date(entry.datePosted), { addSuffix: true }) }}
-                </div>
+                <ClientOnly>
+                  <div
+                    :class="cn(
+                      'ml-auto text-xs',
+                      !isChecked(index)
+                        ? 'text-foreground'
+                        : 'text-muted-foreground',
+                    )"
+                  >
+                    {{ formatDistanceToNow(new Date(entry.datePosted), { addSuffix: true }) }}
+                  </div>
+              </ClientOnly>
               </div>
 
               <div class="text-xs font-medium">
