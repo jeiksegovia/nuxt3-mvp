@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+    CloudFormation template to create an Amplify app to deploy Nuxt v3 app.
+
+Parameters:
+  AppName:
+    Type: String
+    Description: The name of the Amplify app.
+    Default: my-mvp-app
+  AccessToken:
+    Type: String
+    Description: The access token for the Amplify app.
+    NoEcho: true
+
+Resources:
+  AmplifyApp:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: !Ref AppName
+      AccessToken: !Ref AccessToken
+      BuildSpec: |
+        version: 1
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - nvm use 20 && node --version
+                - yarn install
+            build:
+              commands:
+                - yarn build
+          artifacts:
+            baseDirectory: .amplify-hosting
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+      # EnvironmentVariables:
+      #   - Name: NODE_ENV
+      #     Value: production
+      Platform: WEB_COMPUTE
+      EnableBranchAutoDeletion: true
+      Repository: <your replo url> # e.g github.com/jeiksegovia/nuxt3-mvp-test
+      Tags:
+        - Key: stack 
+          Value: mvp
+  
+  devBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt AmplifyApp.AppId
+      BranchName: main # master or main
+      Description: Deployment branch for Amplify app
+      EnableAutoBuild: true
+      EnablePerformanceMode: false
+      EnablePullRequestPreview: false
+      Framework: nuxt.js
+      Tags:
+        - Key: stack
+          Value: mvp
+
+Outputs:
+  AppId:
+    Description: The ID of the Amplify app.
+    Value: !GetAtt AmplifyApp.AppId
+  AppName:
+    Description: The name of the Amplify app.
+    Value: !Ref AppName
+  AppUrl:
+    Description: The URL of the Amplify app.
+    Value: !GetAtt AmplifyApp.DefaultDomain
