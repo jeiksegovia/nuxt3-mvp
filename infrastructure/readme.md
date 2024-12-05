@@ -5,10 +5,10 @@ Contains all the infrastructure IaC (Infrastructure as Code) for the project. Cl
 
 ```sh
 aws cloudformation deploy \
-    --stack-name amplify-app \
+    --stack-name amplify-app-{put a name} \
     --template-file infrastructure/amplify-app.yml \
     --capabilities CAPABILITY_NAMED_IAM \
-    --parameter-overrides AppName=nuxt-mvp-test AccessToken=<your token>\
-    --profile disruptive \
+    --parameter-overrides AppName=nuxt-mvp-{your-name} AccessToken=<your token>\
+    --profile psn-dev \
     --region us-east-1
 ```
