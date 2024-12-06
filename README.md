@@ -145,7 +145,7 @@ Then
 
 Engage base usage of vu3 and nuxt element from `mvp-2` to `mvp-8`.
 
-```bash
+
 
 ## Install shadcn-vue
 mvp-9
@@ -196,7 +196,7 @@ Sidebar example [repo](https://github.com/unovue/shadcn-vue/blob/6c0ab55e9272568
 | ------------------- |
 | git checkout mvp-10 |
 | git checkout mvp-11 |
-- add scroll-area  when styling the entries 
+- add scroll panel, styling the entries 
 
 ```bash
 npx shadcn-vue@latest add scroll-area  
@@ -204,6 +204,7 @@ npx shadcn-vue@latest add scroll-area
 
 - check the console. Why we have a warning: `hydration mismatch`
 	- ssr vs client
+        - local storage only exist on client, so server html has no information about checked items. 
 
 # Headless CMS
 
