@@ -57,13 +57,13 @@ yarn install
 
 - What is Nuxt
 	- works with Vue3
-	- support [ssr rendering](https://tenmilesquare.com/resources/software-development/nuxt-next-nest-my-head-hurts/)
-	- allows more complex "behavior" when serving the pages
-	- you can encapsulate this structures on pages, components, composables and plugins.
+	- supports [ssr rendering](https://tenmilesquare.com/resources/software-development/nuxt-next-nest-my-head-hurts/)
+	- allows more complex "behavior" when serving pages
+	- you can encapsulate these structures on pages, components, composables and plugins.
 - Good for SEO
 - Routes are created from folder structure
-	- you can create routes programmatically
-	- nest pages and components
+	- you can create routes programmatically too
+	- nested pages and components
 	- mix and match routes `/blog/special-[slug]/[title].vue` 
 - composable: reusable piece of logic, that uses vue reactive system. Naming is always: 
 	- use*MyComposable*
